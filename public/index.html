@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Web Whiteboard</title>
+
+    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="client.js"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+
+          <span class="brand">Web Whiteboard</span>
+
+          <div class="nav-collapse collapse">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="carousel" class="carousel slide" data-interval="false">
+      <ol class="carousel-indicators">
+        <li data-target="#carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel" data-slide-to="1"></li>
+        <li data-target="#carousel" data-slide-to="2"></li>
+      </ol>
+
+      <div class="carousel-inner">
+        <div class="item active">
+          <canvas class="canvas"></canvas>
+          <div class="carousel-caption top">
+            <h4>First label</h4>
+          </div>
+          <div id="tag1" class="tag alert alert-info" style="top:80px; left:80px; width: 120px; height: 80px;">hoge</div>
+        </div>
+        <div class="item">
+          <canvas class="canvas"></canvas>
+          <div class="carousel-caption top">
+            <h4>Second label</h4>
+          </div>
+          <div id="tag2" class="tag alert alert-error" style="top:320px; left:150px; width: 120px; height: 80px;">hoge</div>
+        </div>
+        <div class="item">
+          <canvas class="canvas"></canvas>
+          <div class="carousel-caption top">
+            <h4>Third label</h4>
+          </div>
+        </div>
+        <div class="item">
+          <canvas class="canvas"></canvas>
+          <div class="carousel-caption top">
+            <h4>Fourth label</h4>
+          </div>
+        </div>
+      </div>
+
+      <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
+    </div>
+
+  </body>
+</html>
