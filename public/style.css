@@ -1,0 +1,13 @@
+.top {
+  top: 0;
+  bottom: auto;
+}
+
+.canvas {
+  width: 1366px;
+  height:768px;
+}
+
+.tag {
+  position: absolute;
+}
