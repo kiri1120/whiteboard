@@ -32,47 +32,27 @@
           <span class="brand">Web Whiteboard</span>
 
           <div class="nav-collapse collapse">
+            <form id="create-board" class="input-append">
+              <input type="text" id="boardname" placeholder="board name">
+              <div class="btn-group">
+                <button class="btn">Create Board</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a id="rename-board">Rename this borad</a></li>
+                  <li><a id="delete-board">Delete this board</a></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="carousel" class="carousel slide" data-interval="false">
-      <ol class="carousel-indicators">
-        <li data-target="#carousel" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel" data-slide-to="1"></li>
-        <li data-target="#carousel" data-slide-to="2"></li>
-      </ol>
-
-      <div class="carousel-inner">
-        <div class="item active">
-          <canvas class="canvas"></canvas>
-          <div class="carousel-caption top">
-            <h4>First label</h4>
-          </div>
-          <div id="tag1" class="tag alert" style="top:80px; left:80px; width: 120px; height: 80px;">hoge</div>
-        </div>
-        <div class="item">
-          <canvas class="canvas"></canvas>
-          <div class="carousel-caption top">
-            <h4>Second label</h4>
-          </div>
-          <div id="tag2" class="tag alert alert-error" style="top:320px; left:150px; width: 120px; height: 80px;">hoge</div>
-        </div>
-        <div class="item">
-          <canvas class="canvas"></canvas>
-          <div class="carousel-caption top">
-            <h4>Third label</h4>
-          </div>
-        </div>
-        <div class="item">
-          <canvas class="canvas"></canvas>
-          <div class="carousel-caption top">
-            <h4>Fourth label</h4>
-          </div>
-        </div>
-      </div>
-
+    <div id="carousel" class="carousel slide">
+      <ol class="carousel-indicators"></ol>
+      <div class="carousel-inner"></div>
       <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
       <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
     </div>
