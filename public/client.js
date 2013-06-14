@@ -19,8 +19,14 @@ $(function() {
     return false;
   });
 
-  //delete board
+  // delete board
   $('#delete-board').click(deleteBoard);
+
+  // rename board
+  $('#rename-board').click(function() {
+    renameBoard($('#boardname').val());
+    $('#boardname').val('');
+  });
 
   // create board
   function createBoard(name) {
@@ -39,23 +45,39 @@ $(function() {
     $('#carousel').carousel(carouselOption);
   }
 
-  //delete board
+  // delete board
   function deleteBoard() {
     if (boards.length == 1) {
       return;
     }
-    var id = $('#carousel .item.active').attr('id').replace(/board\-/, '');
-
-    for (key in boards) {
-      if (boards[key].id == id) {
-        boards.splice(key, 1);
+    var id = getActiveBoardId();
+    for (i=0; i<boards.length; i++) {
+      if (boards[i].id == id) {
+        boards.splice(i, 1);
       }
     }
+    $('#carousel').hide('slow');
     $('#carousel .item.active').remove();
     $('#carousel .carousel-indicators li:last').remove();
 
     $('#carousel').carousel(carouselOption);
     $('#carousel').carousel('next');
+    $('#carousel').show('slow');
+    console.log(JSON.stringify(boards));
   }
 
+  // rename board
+  function renameBoard(name) {
+    var id = getActiveBoardId();
+    for (i=0; i<boards.length; i++) {
+      if (boards[i].id == id) {
+        boards[i].name = name;
+      }
+    }
+    $('#carousel .item.active h4').text(name);
+  }
+
+  function getActiveBoardId() {
+    return $('#carousel .item.active').attr('id').replace(/board\-/, '');
+  }
 });
