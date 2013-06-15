@@ -32,19 +32,33 @@
           <span class="brand">Web Whiteboard</span>
 
           <div class="nav-collapse collapse">
-            <form id="create-board" class="input-append">
-              <input type="text" id="boardname" placeholder="board name">
-              <div class="btn-group">
-                <button class="btn">Create Board</button>
-                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a id="rename-board">Rename this borad</a></li>
-                  <li><a id="delete-board">Delete this board</a></li>
-                </ul>
+            <form id="create-board" class="navbar-form pull-left">
+              <div class="input-append">
+                <input type="text" id="boardname" placeholder="board name">
+                <div class="btn-group">
+                  <button class="btn btn-primary">Create Board</button>
+                  <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a id="rename-board">Rename this borad</a></li>
+                    <li><a id="delete-board">Delete this board</a></li>
+                  </ul>
+                </div>
               </div>
-            </div>
+            </form>
+            <form id="create-tag" class="navbar-form pull-left">
+              <div class="input-prepend input-append">
+                <span class="add-on">X</span>
+                <input id="tag_pos_x" type="text" placeholder="X" class="input-mini">
+                <span class="add-on">Y</span>
+                <input id="tag_pos_y" type="text" placeholder="Y" class="input-mini">
+                <span class="add-on">Width</span>
+                <input id="tag_width" type="text" placeholder="Width" class="input-mini">
+                <span class="add-on">Height</span>
+                <input id="tag_height" type="text" placeholder="Height" class="input-mini">
+                <button class="btn btn-primary">Create Tag</button>
+              </div>
           </div>
         </div>
       </div>

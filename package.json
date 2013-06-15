@@ -1,0 +1,27 @@
+{
+  "name": "whiteboard",
+  "version": "0.0.0",
+  "description": "web whiteboard application",
+  "main": "server.js",
+  "dependencies": {
+    "config": "~0.4.26",
+    "crypto": "~0.0.3",
+    "sequelize": "~2.0.0-alpha2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kiri1120/whiteboard.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "b8499a550f73e643ce5beec717afb834c932d44a",
+  "bugs": {
+    "url": "https://github.com/kiri1120/whiteboard/issues"
+  }
+}

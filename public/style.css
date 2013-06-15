@@ -43,3 +43,7 @@ body {
 .nav-collapse form {
   margin-top: 5px;
 }
+
+form {
+  margin-left: 10px;
+}
