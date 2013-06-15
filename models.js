@@ -14,7 +14,6 @@ exports.models.Massage = exports.sequelize.define('Massage', {
   tag_id:   Sequelize.INTEGER,
   message:  Sequelize.TEXT,
 });
-
 exports.models.Session = exports.sequelize.define('Session', {
   user_id:  Sequelize.INTEGER,
   hash:     'CHAR(40)',

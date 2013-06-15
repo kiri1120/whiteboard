@@ -1,16 +1,15 @@
 var boards = [];
 var carouselOption = { interval : false };
+var defaultTag = {
+  position: 'absolute',
+  width: 160,
+  height: 160
+};
 
 $(function() {
   //initialize
   createBoard('first');
   $('#carousel').carousel('next');
-
-  // tag resize
-  $('.tag').resizable();
-
-  // tag move
-  $('.tag').draggable();
 
   // create board
   $('#create-board').submit(function() {
@@ -28,6 +27,12 @@ $(function() {
     $('#boardname').val('');
   });
 
+  // create tag
+  $('canvas').dblclick(function(event) {
+    createTag(event.pageX, event.pageY - 60, defaultTag.width, defaultTag.height);
+  });
+
+  //----------------------- functions -----------------------
   // create board
   function createBoard(name) {
     var id;
@@ -79,5 +84,27 @@ $(function() {
 
   function getActiveBoardId() {
     return $('#carousel .item.active').attr('id').replace(/board\-/, '');
+  }
+  
+  function createTag(x, y) {
+    var id = getActiveBoardId();
+    var tagOption = defaultTag;
+    tagOption.left = x;
+    tagOption.top = y;
+    $('#board-' + id).append(
+      $('<div>').addClass('tag alert alert-error').css(tagOption).append(
+        '<h4>kiri</h4><p>message</p><div class="message hide"><input type="text"><button class="btn btn-primary">send</button><button class="btn">cancel</button></div>'
+      )
+    );
+    $('.tag').resizable();
+    $('.tag').draggable();
+    $('.tag').hover(
+      function () {
+        $('.message').show();
+      },
+      function () {
+        $('.message').hide();
+      }
+    );
   }
 });
