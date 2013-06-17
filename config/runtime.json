@@ -1,4 +1,4 @@
 {
   "socket_io": 3001,
-  "sequelize" : "mysql://kiri1120:kiri1120@localhost/nodejs"
+  "mysql" : "mysql://kiri1120:kiri1120@localhost/nodejs"
 }

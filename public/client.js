@@ -8,8 +8,7 @@ var defaultTag = {
 
 $(function() {
   //initialize
-  createBoard('first');
-  $('#carousel').carousel('next');
+  
 
   // create board
   $('#create-board').submit(function() {
@@ -25,11 +24,6 @@ $(function() {
   $('#rename-board').click(function() {
     renameBoard($('#boardname').val());
     $('#boardname').val('');
-  });
-
-  // create tag
-  $('canvas').dblclick(function(event) {
-    createTag(event.pageX, event.pageY - 60, defaultTag.width, defaultTag.height);
   });
 
   //----------------------- functions -----------------------
@@ -48,6 +42,11 @@ $(function() {
     $('#carousel .carousel-inner').append('<div id="board-' + id + '" class="item"><canvas class="canvas"></canvas><div class="carousel-caption pull-top"><h4>' + name + '</h4></div></div>');
 
     $('#carousel').carousel(carouselOption);
+
+    // create tag
+    $('#carousel canvas').click(function(event) {
+      createTag(event.pageX, event.pageY - 60);
+    });
   }
 
   // delete board

@@ -2,7 +2,7 @@ var config = require('config');
 var Sequelize = require('sequelize');
 
 exports.models = {};
-exports.sequelize = new Sequelize(config.sequelize);
+exports.sequelize = new Sequelize(config.mysql);
 
 exports.models.Board = exports.sequelize.define('Board', {
   name: Sequelize.STRING,

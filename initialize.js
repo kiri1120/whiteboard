@@ -1,7 +1,10 @@
-var ORM = require('./models');
+var ORM = require('./orm');
 var sequelize = ORM.sequelize;
-var models = ORM.models;
 
-sequelize.sync({ force: true }).success(function() {
-  models.Board.create({name: '1st board'});
+sequelize.sync({ force : true }).success(function() {
+  var Board = ORM.models.Board;
+  Board.findOrCreate({ name : "first board" }).success(function(board, created) {
+    console.log(board.values)
+    console.log(created)
+  });
 });
