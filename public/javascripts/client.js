@@ -6,6 +6,16 @@ var uri = "http://" + location.hostname + ":3000/";
 var carouselOption = { interval : false };
 
 $(function() {
+  // 付箋のテンプレート初期化
+  $('#tagreference').hover(
+    function () {
+      $(this).find('.message').show();
+    },
+    function () {
+      $(this).find('.message').hide();
+    }
+  );
+
   // socket.io initialize
   var socket = io.connect(uri);
 
@@ -13,7 +23,7 @@ $(function() {
   socket.on('initStart', function(){
     $('#carousel .carousel-indicators').empty();
     $('#carousel .carousel-inner').empty();
-    $('.tag').remove();
+    $('#carousel .tag').remove();
   });
 
   // 初期化完了
@@ -34,6 +44,16 @@ $(function() {
   // ホワイトボード名変更
   socket.on('renameBoard', function(data) {
     renameBoard(data);
+  });
+
+  // 付箋貼付
+  socket.on('createTag', function(data) {
+    createTag(data);
+  });
+
+  // 付箋更新
+  socket.on('updateTag', function(data) {
+    updateTag(data);
   });
 
   // エラー通知
@@ -71,14 +91,13 @@ $(function() {
     $('#carousel').carousel(carouselOption);
 
     // create tag event
-    $('#carousel canvas').dblclick(function(event) {
-      event.preventDefault();
+    $('#carousel canvas').click(function(event) {
       var data = {
+        board_id : getActiveBoardId(),
         position_x: event.pageX,
         position_y: event.pageY - 60
       }
       socket.emit('createTag', data);
-      return false;
     });
 
     boardsCount++;
@@ -105,27 +124,59 @@ $(function() {
   function getActiveBoardId() {
     return $('#carousel .item.active').attr('id').replace(/board\-/, '');
   }
-  
-  function createTag(x, y) {
-/*
-    var id = getActiveBoardId();
-    var tagOption = defaultTag;
-    tagOption.left = x;
-    tagOption.top = y;
-    $('#board-' + id).append();
-    $('.tag').resizable();
-    $('.tag').draggable();
-    $('.tag').hover(
-      function () {
-        $('.message').show();
-      },
-      function () {
-        $('.message').hide();
-      }
-    );
-*/
+
+  // create tag
+  function createTag(tag) {
+    var taghtml = $('#tagreference').clone(true);
+    var css = {
+      color           : tag.color,
+      backgroundColor : tag.background_color,
+      left            : tag.position_x,
+      top             : tag.position_y,
+      width           : tag.size_x,
+      height          : tag.size_y,
+    };
+
+    $('#board-' + tag.board_id).append(taghtml);
+    taghtml.attr('id', 'tag-' + tag.id);
+    taghtml.css(css);
+    taghtml.show();
+
+    taghtml.resizable({ stop : function() {
+      changeTag(taghtml);
+    }});
+    taghtml.draggable({ stop : function() {
+      changeTag(taghtml);
+    }});
+
   }
 
+  // change tag event
+  function changeTag(taghtml) {
+    var data = {
+      id          : taghtml.attr('id').replace(/tag\-/, ''),
+      size_x      : taghtml.css('width'),
+      size_y      : taghtml.css('height'),
+      position_x  : taghtml.css('left'),
+      position_y  : taghtml.css('top'),
+    };
+    socket.emit('changeTag', data);
+  }
+
+  // update tag
+  function updateTag(tag) {
+    var css = {
+      color           : tag.color,
+      backgroundColor : tag.background_color,
+      left            : tag.position_x,
+      top             : tag.position_y,
+      width           : tag.size_x,
+      height          : tag.size_y,
+    };
+    $('#tag-' + tag.id).css(css);
+  }
+
+  // show error message
   function errorShow(error) {
     $('#error-body').text(error);
     $('#error').modal('show');

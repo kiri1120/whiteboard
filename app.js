@@ -55,8 +55,13 @@ io.sockets.on('connection', function(socket) {
   // initStart
   socket.emit('initStart');
   Board.findAll({ where: { visible: true } }).success(function(boards) {
-    boards.forEach(function(board){
+    boards.forEach(function(board) {
       socket.emit('createBoard', board);
+      Tag.findAll({ where : { board_id : board.id, visible : true }}).success(function(tags) {
+        tags.forEach(function(tag) {
+          socket.emit('createTag', tag);
+        });
+      });
     });
     socket.emit('initEnd');
   })
@@ -99,6 +104,34 @@ io.sockets.on('connection', function(socket) {
       board.name = name;
       board.save().success(function() {
         broadcast(socket, 'renameBoard', board);
+      });
+    });
+  });
+
+  // create tag
+  socket.on('createTag', function(data) {
+    var board_id = toInt(data.board_id);
+    var position_x = toInt(data.position_x);
+    var position_y = toInt(data.position_y);
+    Board.find({ where : { id : board_id, visible : true } }).success(function(board) {
+      Tag.create({ board_id : board_id, position_x : position_x, position_y : position_y }).success(function(tag) {
+        broadcast(socket, 'createTag', tag);
+      });
+    });
+  });
+
+  // change tag
+  socket.on('changeTag', function(data) {
+    var updatedata = {
+      id          : toInt(data.id),
+      size_x      : toInt(data.size_x),
+      size_y      : toInt(data.size_y),
+      position_x  : toInt(data.position_x),
+      position_y  : toInt(data.position_y),
+    };
+    Tag.find({ where : { id : updatedata.id, visible : true } }).success(function(tag) {
+      tag.updateAttributes(updatedata).success(function(updatedtag) {
+        broadcast(socket, 'updateTag', updatedtag);
       });
     });
   });

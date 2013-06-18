@@ -38,15 +38,10 @@ body {
 
 .tag {
   position: absolute;
-  border: solid 1px;
-  width: 160;
-  height: 160;
+  border: solid 1px #000000;
 }
 
 .nav-collapse form {
   margin-top: 5px;
 }
 
-form {
-  margin-left: 10px;
-}
