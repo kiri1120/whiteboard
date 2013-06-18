@@ -71,12 +71,14 @@ $(function() {
     $('#carousel').carousel(carouselOption);
 
     // create tag event
-    $('#carousel canvas').click(function(event) {
+    $('#carousel canvas').dblclick(function(event) {
+      event.preventDefault();
       var data = {
         position_x: event.pageX,
         position_y: event.pageY - 60
       }
       socket.emit('createTag', data);
+      return false;
     });
 
     boardsCount++;
