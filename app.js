@@ -93,6 +93,7 @@ io.sockets.on('connection', function(socket) {
     var name = toText(data.name);
     if (name == "") {
       socket.emit('error', 'can not rename board to empty');
+      return;
     }
     Board.find(id).success(function(board) {
       board.name = name;
