@@ -1,10 +1,16 @@
-var ORM = require('./orm');
-var sequelize = ORM.sequelize;
+// require libs
+var config = require('config'),
+    Sequelize = require('sequelize');
 
+// connecttion
+var sequelize = new Sequelize(config.mysql);
+
+// models imports
+var Board   = sequelize.import(__dirname + "/models/board"),
+    Tag     = sequelize.import(__dirname + "/models/tag"),
+    Message = sequelize.import(__dirname + "/models/message");
+
+// initialize
 sequelize.sync({ force : true }).success(function() {
-  var Board = ORM.models.Board;
-  Board.findOrCreate({ name : "first board" }).success(function(board, created) {
-    console.log(board.values)
-    console.log(created)
-  });
+  Board.findOrCreate({ name : "first board" });
 });

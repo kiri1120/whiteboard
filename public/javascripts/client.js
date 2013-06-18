@@ -1,85 +1,103 @@
-var boards = [];
+// initialize 
+var boardsCount = 0;
+
+// options
+var uri = "http://" + location.hostname + ":3000/";
 var carouselOption = { interval : false };
-var defaultTag = {
-  position: 'absolute',
-  width: 160,
-  height: 160
-};
 
 $(function() {
-  //initialize
-  createBoard('first');
-  $('#carousel').carousel('next');
+  // socket.io initialize
+  var socket = io.connect(uri);
 
-  // create board
+  // 初期化
+  socket.on('initStart', function(){
+    $('#carousel .carousel-indicators').empty();
+    $('#carousel .carousel-inner').empty();
+    $('.tag').remove();
+  });
+
+  // 初期化完了
+  socket.on('initEnd', function() {
+    $('#carousel').carousel('next');
+  });
+
+  // ホワイトボード作成
+  socket.on('createBoard', function(data) {
+    createBoard(data);
+  });
+
+  // ホワイトボード削除
+  socket.on('deleteBoard', function(data) {
+    deleteBoard(data);
+  });
+
+  // ホワイトボード名変更
+  socket.on('renameBoard', function(data) {
+    renameBoard(data);
+  });
+
+  // エラー通知
+  socket.on('error', function(error){
+    errorShow(error);
+  });
+
+  // create board event
   $('#create-board').submit(function() {
-    createBoard($('#boardname').val());
+    socket.emit('createBoard', $('#boardname').val());
     $('#boardname').val('');
     return false;
   });
 
   // delete board
-  $('#delete-board').click(deleteBoard);
+  $('#delete-board').click(function() {
+    socket.emit('deleteBoard', getActiveBoardId());
+  });
 
   // rename board
   $('#rename-board').click(function() {
-    renameBoard($('#boardname').val());
+    var data = {
+      id    : getActiveBoardId(),
+      name  : $('#boardname').val(),
+    }
+    socket.emit('renameBoard', data);
     $('#boardname').val('');
   });
 
   //----------------------- functions -----------------------
   // create board
-  function createBoard(name) {
-    var id;
-    if (boards.length == 0) {
-      id = 0;
-    } else {
-      id = boards[boards.length - 1].id + 1;
-    }
-
-    boards.push({id:id, name:name});
-
-    $('#carousel .carousel-indicators').append($('<li>').attr('data-target', '#carousel').attr('data-slide-to', boards.length - 1));
-    $('#carousel .carousel-inner').append('<div id="board-' + id + '" class="item"><canvas class="canvas"></canvas><div class="carousel-caption pull-top"><h4>' + name + '</h4></div></div>');
-
+  function createBoard(board) {
+    $('#carousel .carousel-indicators').append($('<li>').attr('data-target', '#carousel').attr('data-slide-to', boardsCount));
+    $('#carousel .carousel-inner').append('<div id="board-' + board.id + '" class="item"><canvas class="canvas"></canvas><div class="carousel-caption pull-top"><h4>' + board.name + '</h4></div></div>');
     $('#carousel').carousel(carouselOption);
 
-    // create tag
+    // create tag event
     $('#carousel canvas').click(function(event) {
-      createTag(event.pageX, event.pageY - 60);
+      var data = {
+        position_x: event.pageX,
+        position_y: event.pageY - 60
+      }
+      socket.emit('createTag', data);
     });
+
+    boardsCount++;
   }
 
   // delete board
-  function deleteBoard() {
-    if (boards.length == 1) {
-      return;
+  function deleteBoard(id) {
+    if (id == getActiveBoardId()) {
+      $('#carousel').hide('slow');
+      $('#carousel').carousel('next');
+      $('#carousel').show('slow');
     }
-    var id = getActiveBoardId();
-    for (i=0; i<boards.length; i++) {
-      if (boards[i].id == id) {
-        boards.splice(i, 1);
-      }
-    }
-    $('#carousel').hide('slow');
-    $('#carousel .item.active').remove();
     $('#carousel .carousel-indicators li:last').remove();
+    $('#board-' + id).remove();
 
     $('#carousel').carousel(carouselOption);
-    $('#carousel').carousel('next');
-    $('#carousel').show('slow');
-    console.log(JSON.stringify(boards));
   }
 
   // rename board
-  function renameBoard(name) {
-    var id = getActiveBoardId();
-    for (i=0; i<boards.length; i++) {
-      if (boards[i].id == id) {
-        boards[i].name = name;
-      }
-    }
-    $('#carousel .item.active h4').text(name);
+  function renameBoard(board) {
+    $('#board-' + board.id + ' h4').text(board.name);
   }
 
   function getActiveBoardId() {
@@ -87,15 +105,12 @@ $(function() {
   }
   
   function createTag(x, y) {
+/*
     var id = getActiveBoardId();
     var tagOption = defaultTag;
     tagOption.left = x;
     tagOption.top = y;
-    $('#board-' + id).append(
-      $('<div>').addClass('tag alert alert-error').css(tagOption).append(
-        '<h4>kiri</h4><p>message</p><div class="message hide"><input type="text"><button class="btn btn-primary">send</button><button class="btn">cancel</button></div>'
-      )
-    );
+    $('#board-' + id).append();
     $('.tag').resizable();
     $('.tag').draggable();
     $('.tag').hover(
@@ -106,5 +121,12 @@ $(function() {
         $('.message').hide();
       }
     );
+*/
   }
+
+  function errorShow(error) {
+    $('#error-body').text(error);
+    $('#error').modal('show');
+  }
+
 });

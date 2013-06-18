@@ -39,6 +39,8 @@ body {
 .tag {
   position: absolute;
   border: solid 1px;
+  width: 160;
+  height: 160;
 }
 
 .nav-collapse form {
