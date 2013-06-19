@@ -11,7 +11,6 @@ var express   = require('express'),
     check     = require('validator').check,
     sanitize  = require('validator').sanitize,
     routes    = require('./routes'),
-    sha1sum   = require('crypto').createHash('sha1'),
     SPF       = require('sprintf');
 
 // global settings
@@ -34,7 +33,7 @@ redirect = function(req, res, target) {
   res.redirect('http://' + req.header('host') + target);
 };
 hash = function(str) {
-  return sha1sum.update(str, 'utf8').digest('hex');
+  return require('crypto').createHash('sha1').update(str, 'utf8').digest('hex');
 };
 uid = function(size) {
   size = size || 32;
@@ -97,6 +96,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/login', routes.login.get);
 app.post('/login', routes.login.post);
+app.post('/signup', routes.signup.post);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

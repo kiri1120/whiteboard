@@ -7,10 +7,13 @@ module.exports = function(sequelize, DataTypes) {
   ,{
     classMethods : {
       createSession : function() {
-        return Session.Build({
+        return Session.build({
           hash : uid(40),
-          ttl  : Date.now() + 60 * 60 * 1000, // 1時間
+          ttl  : Session.getNewTtl(), 
         });
+      },
+      getNewTtl : function() {
+        return new Date(Date.now() + 60 * 60 * 1000); // 1時間
       },
     }
   });
