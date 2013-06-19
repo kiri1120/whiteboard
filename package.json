@@ -4,7 +4,8 @@
   "description": "web whiteboard application",
   "main": "app.js",
   "dependencies": {
-    "config": "~0.4.26",
+    "config": "~0.4.27",
+    "crypt": "~0.0.1",
     "ejs": "~0.8.4",
     "express": "~3.2.6",
     "mysql": "~2.0.0-alpha8",
@@ -23,6 +24,7 @@
   },
   "author": "",
   "license": "BSD",
-  "readmeFilename": "README.md",
-  "gitHead": "2836cf44d176e2902a3ec44810f51cb55c4b6ae8"
+  "bugs": {
+    "url": "https://github.com/kiri1120/whiteboard/issues"
+  }
 }

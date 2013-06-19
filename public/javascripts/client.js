@@ -93,7 +93,7 @@ $(function() {
     // create tag event
     $('#carousel canvas').click(function(event) {
       var data = {
-        board_id : getActiveBoardId(),
+        BoardId   : getActiveBoardId(),
         position_x: event.pageX,
         position_y: event.pageY - 60
       }
@@ -137,7 +137,7 @@ $(function() {
       height          : tag.size_y,
     };
 
-    $('#board-' + tag.board_id).append(taghtml);
+    $('#board-' + tag.BoardId).append(taghtml);
     taghtml.attr('id', 'tag-' + tag.id);
     taghtml.css(css);
     taghtml.show();

@@ -1,85 +1,85 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang='ja'>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='description' content=''>
+    <meta name='author' content=''>
     <title><%= title %></title>
 
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css" />
-    <link href="./stylesheets/style.css" rel="stylesheet">
+    <link rel='stylesheet' href='/assets/bootstrap/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/assets/jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css' />
+    <link href='./stylesheets/style.css' rel='stylesheet'>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./socket.io/socket.io.js"></script>
-    <script src="./javascripts/client.js"></script>
-  </script>
-
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+    <script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js'></script>
+    <script src='/assets/bootstrap/js/bootstrap.min.js'></script>
+    <script src='./socket.io/socket.io.js'></script>
+    <script src='./javascripts/client.js'></script>
   </head>
 
   <body>
-    <div class="navbar">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+    <div class='index'>
+      <div class='navbar'>
+        <div class='navbar-inner'>
+          <div class='container'>
+            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+            </a>
 
-          <span class="brand"><%= title %></span>
+            <span class='brand'><%= title %></span>
 
-          <div class="nav-collapse collapse">
-            <form id="create-board" class="navbar-form pull-left">
-              <div class="input-append">
-                <input type="text" id="boardname" placeholder="board name">
-                <div class="btn-group">
-                  <button class="btn btn-primary">Create Board</button>
-                  <button class="btn dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a id="rename-board">Rename this borad</a></li>
-                    <li><a id="delete-board">Delete this board</a></li>
-                  </ul>
+            <div class='nav-collapse collapse'>
+              <form id='create-board' class='navbar-form pull-left'>
+                <div class='input-append'>
+                  <input type='text' id='boardname' placeholder='board name'>
+                  <div class='btn-group'>
+                    <button class='btn btn-primary'>Create Board</button>
+                    <button class='btn dropdown-toggle' data-toggle='dropdown'>
+                      <span class='caret'></span>
+                    </button>
+                    <ul class='dropdown-menu'>
+                      <li><a id='rename-board'>Rename this borad</a></li>
+                      <li><a id='delete-board'>Delete this board</a></li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div id="carousel" class="carousel slide">
-      <ol class="carousel-indicators"></ol>
-      <div class="carousel-inner"></div>
-      <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
-    </div>
-
-    <!-- tag reference -->
-    <div id='tagreference' class='tag alert hide'>
-      <div class="messages"></div>
-      <form class="message hide pull-bottom input-append">
-        <input type="text" id='message' class="input-block-level">
-        <button class="btn btn-primary">send</button>
-      </form>
-    </div>
-
-    <!-- error modal window -->
-    <div id="error" class="modal hide fade" role="dialog" aria-labelledby="Error" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 class="text-error">Error</h3>
+      <div id='carousel' class='carousel slide'>
+        <ol class='carousel-indicators'></ol>
+        <div class='carousel-inner'></div>
+        <a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>
+        <a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>
       </div>
-      <div class="modal-body">
-        <p id="error-body" class="text-error"></p>
+
+      <!-- tag reference -->
+      <div id='tagreference' class='tag alert hide'>
+        <div class='messages'></div>
+        <form class='message hide pull-bottom input-append'>
+          <input type='text' id='message' class='input-block-level'>
+          <button class='btn btn-primary'>send</button>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+
+      <!-- error modal window -->
+      <div id='error' class='modal hide fade' role='dialog' aria-labelledby='Error' aria-hidden='true'>
+        <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+          <h3 class='text-error'>Error</h3>
+        </div>
+        <div class='modal-body'>
+          <p id='error-body' class='text-error'></p>
+        </div>
+        <div class='modal-footer'>
+          <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
+        </div>
       </div>
     </div>
   </body>
