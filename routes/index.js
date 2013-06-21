@@ -1,15 +1,15 @@
 module.exports = {
   index : function(req, res) {
-    if (req.session.hash == null) {
+    if (req.cookies.session == null) {
       redirect(req, res, '/login');
     } else {
-      Session.find({ where : [ 'hash = ? AND ttl > ?', req.session.hash, new Date()] }).success(function(session){
+      Session.find({ where : [ 'hash = ? AND ttl > ?', req.cookies.session, new Date()] }).success(function(session){
         if (session == null) {
           redirect(req, res, '/login');
         } else {
           session.ttl = Session.getNewTtl();
           session.save();
-          req.session.hash = session.hash;
+          res.cookie('session', session.hash, { maxAge: config.session.expire });
           session.getUser().success(function(user) {
             res.render('index', { title: config.title, user : user });
           });
@@ -17,6 +17,7 @@ module.exports = {
       });
     }
   },
-  login : require('./login'),
-  signup : require('./signup'),
+  login   : require('./login'),
+  logout  : require('./logout'),
+  signup  : require('./signup'),
 }

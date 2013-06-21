@@ -97,6 +97,7 @@ app.get('/', routes.index);
 app.get('/login', routes.login.get);
 app.post('/login', routes.login.post);
 app.post('/signup', routes.signup.post);
+app.post('/logout', routes.logout.post);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

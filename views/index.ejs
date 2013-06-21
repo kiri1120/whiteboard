@@ -18,75 +18,74 @@
     <script src='./javascripts/client.js'></script>
   </head>
 
-  <body>
-    <div class='index'>
-      <div class='navbar'>
-        <div class='navbar-inner'>
-          <div class='container'>
-            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-            </a>
+  <body class='bgcolor-silver'>
+    <div class='navbar'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </a>
 
-            <span class='brand'><%= title %></span>
+          <span class='brand'><%= title %></span>
 
-            <div class='nav-collapse collapse'>
-              <form id='create-board' class='navbar-form pull-left'>
-                <div class='input-append'>
-                  <input type='text' id='boardname' placeholder='board name'>
-                  <div class='btn-group'>
-                    <button class='btn btn-primary'>Create Board</button>
-                    <button class='btn dropdown-toggle' data-toggle='dropdown'>
-                      <span class='caret'></span>
-                    </button>
-                    <ul class='dropdown-menu'>
-                      <li><a id='rename-board'>Rename this borad</a></li>
-                      <li><a id='delete-board'>Delete this board</a></li>
-                    </ul>
-                  </div>
+          <div class='nav-collapse collapse'>
+            <form id='create-board' class='navbar-form pull-left'>
+              <div class='input-append'>
+                <input type='text' id='boardname' placeholder='board name'>
+                <div class='btn-group'>
+                  <button class='btn btn-primary'>Create Board</button>
+                  <button class='btn dropdown-toggle' data-toggle='dropdown'>
+                    <span class='caret'></span>
+                  </button>
+                  <ul class='dropdown-menu'>
+                    <li><a id='rename-board'>Rename this borad</a></li>
+                    <li><a id='delete-board'>Delete this board</a></li>
+                  </ul>
                 </div>
-              </form>
-              <form action='logout' method='POST' class='navbar-form pull-right'>
-                <div class='input-prepend input-append'>
-                  <span class='add-on'>Username</span>
-                  <span class='add-on'><%= user.nickname %></span>
-                  <button class='btn'>Logout</button>
-                </div>
-              </form>
-            </div>
+              </div>
+            </form>
+            <form action='logout' method='POST' class='navbar-form pull-right'>
+              <div class='input-prepend input-append'>
+                <span class='add-on'>Username</span>
+                <span class='add-on'><%= user.nickname %></span>
+                <button class='btn'>Logout</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
 
-      <div id='carousel' class='carousel slide'>
-        <ol class='carousel-indicators'></ol>
-        <div class='carousel-inner'></div>
-        <a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>
-        <a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>
+    <div id='carousel' class='carousel slide'>
+      <ol class='carousel-indicators'></ol>
+      <div class='carousel-inner'></div>
+      <a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>
+      <a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>
+    </div>
+
+    <!-- tag reference -->
+    <div id='tagreference' class='tag alert hide'>
+      <button type='button' class='close' data-dismiss='tagreference' aria-hidden='true'>&times;</button>
+      <div class='messages'></div>
+      <form class='message hide pull-bottom input-append'>
+        <input type='text' id='message' class='input-block-level'>
+        <button class='btn btn-primary'>send</button>
+      </form>
+    </div>
+
+    <!-- error modal window -->
+    <div id='error' class='modal hide fade' role='dialog' aria-labelledby='Error' aria-hidden='true'>
+      <div class='modal-header'>
+        <button type='button' class='close'>&times;</button>
+        <h3 class='text-error'>Error</h3>
       </div>
-
-      <!-- tag reference -->
-      <div id='tagreference' class='tag alert hide'>
-        <div class='messages'></div>
-        <form class='message hide pull-bottom input-append'>
-          <input type='text' id='message' class='input-block-level'>
-          <button class='btn btn-primary'>send</button>
-        </form>
+      <div class='modal-body'>
+        <p id='error-body' class='text-error'></p>
       </div>
-
-      <!-- error modal window -->
-      <div id='error' class='modal hide fade' role='dialog' aria-labelledby='Error' aria-hidden='true'>
-        <div class='modal-header'>
-          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-          <h3 class='text-error'>Error</h3>
-        </div>
-        <div class='modal-body'>
-          <p id='error-body' class='text-error'></p>
-        </div>
-        <div class='modal-footer'>
-          <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
-        </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
       </div>
     </div>
   </body>

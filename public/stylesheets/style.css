@@ -49,10 +49,6 @@ body {
   height: 100%;
 }
 
-.index {
-  background-color: silver;
-}
-
-.login {
-  background-color: white;
+.bgcolor-silver {
+  background-color : silver;
 }

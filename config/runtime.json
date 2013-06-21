@@ -1,5 +1,8 @@
 {
-  "title": "Web WhiteBoard",
-  "port": 3000,
-  "mysql": "mysql://kiri1120:kiri1120@localhost/nodejs"
+  "title"   : "Web WhiteBoard",
+  "port"    : 3000,
+  "mysql"   : "mysql://kiri1120:kiri1120@localhost/nodejs",
+  "session" : {
+    "expire" : 3600000 // = 60 * 60 * 1000（単位：ミリ秒）
+  }
 }

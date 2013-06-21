@@ -149,6 +149,9 @@ $(function() {
       changeTag(taghtml);
     }});
 
+    taghtml.find('.close').click(function() {
+      closeTag(taghtml);
+    });
   }
 
   // change tag event
@@ -161,6 +164,11 @@ $(function() {
       position_y  : taghtml.css('top'),
     };
     socket.emit('changeTag', data);
+  }
+
+  // close tag event
+  function closeTag(tag) {
+    tag.hide();
   }
 
   // update tag

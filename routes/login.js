@@ -12,7 +12,7 @@ module.exports = {
       } else {
         var session = Session.createSession();
         user.addSession(session).success(function(createdSession) {
-          req.session.hash = createdSession.hash;
+          res.cookie('session', createdSession.hash, { maxAge: config.session.expire }); ;
           redirect(req, res, '/');
         }).error(function(e){
           res.render('login', { title : config.title, error : e });
