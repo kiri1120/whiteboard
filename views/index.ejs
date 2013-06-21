@@ -5,15 +5,19 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content=''>
     <meta name='author' content=''>
-    <title><%= title %></title>
+    <title><%= config.title %></title>
 
     <link rel='stylesheet' href='/assets/bootstrap/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/assets/jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css' />
-    <link href='./stylesheets/style.css' rel='stylesheet'>
+    <link rel="stylesheet" href='/assets/colorpicker/css/colorpicker.css' />
+    <link rel='stylesheet' href='./stylesheets/style.css' />
 
     <script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
     <script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js'></script>
     <script src='/assets/bootstrap/js/bootstrap.min.js'></script>
+    <script src="/assets/colorpicker/js/colorpicker.js"></script>
+    <script src="/assets/colorpicker/js/eye.js"></script>
+    <script src="/assets/colorpicker/js/utils.js"></script>
     <script src='./socket.io/socket.io.js'></script>
     <script src='./javascripts/client.js'></script>
   </head>
@@ -28,7 +32,7 @@
             <span class='icon-bar'></span>
           </a>
 
-          <span class='brand'><%= title %></span>
+          <span class='brand'><%= config.title %></span>
 
           <div class='nav-collapse collapse'>
             <form id='create-board' class='navbar-form pull-left'>
@@ -68,6 +72,8 @@
     <!-- tag reference -->
     <div id='tagreference' class='tag alert hide'>
       <button type='button' class='close' data-dismiss='tagreference' aria-hidden='true'>&times;</button>
+      <input type='color' class="input-mini pull-right" />
+
       <div class='messages'></div>
       <form class='message hide pull-bottom input-append'>
         <input type='text' id='message' class='input-block-level'>

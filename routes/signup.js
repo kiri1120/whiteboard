@@ -4,9 +4,18 @@ module.exports = {
     var password = toText(req.body.password);
     var nickname = toText(req.body.nickname);
 
-    if (userid == '')   { res.render('login', { title : config.title, error : 'UserIDが未入力です' }); }
-    if (password == '') { res.render('login', { title : config.title, error : 'Passwordが未入力です' }); }
-    if (nickname == '') { res.render('login', { title : config.title, error : '名前が未入力です' }); }
+    if (userid == '')   {
+      res.render('error', { error : 'UserIDが未入力です' });
+      return;
+    }
+    if (password == '') {
+      res.render('error', { error : 'Passwordが未入力です' });
+      return;
+    }
+    if (nickname == '') {
+      res.render('error', { error : '名前が未入力です' });
+      return;
+    }
 
     User.find({ where : { userid : userid } }).success(function(user) {
       if (user == null) {
@@ -16,13 +25,13 @@ module.exports = {
             res.cookie('session', createdSession.hash, { maxAge : config.session.expire });
             redirect(req, res, '/');
           }).error(function(e) {
-            res.render('login', { title : config.title, error : e });
+            res.render('error', { error : e });
           });
         }).error(function(e) {
-          res.render('login', { title : config.title, error : e });
+          res.render('error', { error : e });
         });
       } else {
-        res.render('login', { title : config.title, error : 'すでに存在するユーザーです。' });
+        res.render('error', { error : 'すでに存在するユーザーです。' });
       }
     });
   },

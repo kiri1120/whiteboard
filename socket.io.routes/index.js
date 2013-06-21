@@ -44,4 +44,9 @@ module.exports = function(socket) {
   socket.on('changeTag', function(data) {
     tagControl.updateTag(socket, data);
   });
+
+  // close tag
+  socket.on('closeTag', function(data) {
+    tagControl.closeTag(socket, data);
+  });
 }

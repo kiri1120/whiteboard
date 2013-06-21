@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
         });
       },
       getNewTtl : function() {
-        return new Date(Date.now() + 60 * 60 * 1000); // 1時間
+        return new Date(Date.now() + config.session.expire);
       },
     }
   });

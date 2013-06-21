@@ -76,14 +76,7 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-
-// session store
 app.use(express.cookieParser());
-app.use(express.session({
-  secret: 'webwhiteboard',
-  cookie: { maxAge: new Date(Date.now() + 60 * 60 * 1000)  // 1ŽžŠÔ
-}}));
-
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 

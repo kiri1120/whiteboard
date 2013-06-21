@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='ja'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='description' content=''>
+    <meta name='author' content=''>
+    <title><%= config.title %></title>
+
+    <link rel='stylesheet' href='/assets/bootstrap/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/assets/jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css' />
+    <link href='./stylesheets/style.css' rel='stylesheet'>
+
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+    <script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js'></script>
+    <script src='/assets/bootstrap/js/bootstrap.min.js'></script>
+  </head>
+
+  <body>
+    <div class='navbar'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <span class='brand'><%= config.title %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class='container'>
+      <div id='error' class='alert alert-error'>
+        <h3 class='text-error'>Error</h3>
+        <p id='error-body' class='text-error'><%= error %></p>
+        <a href="./" class='btn btn-primary'>OK</a>
+      </div>
+    </div>
+  </body>
+</html>

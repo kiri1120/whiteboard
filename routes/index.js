@@ -7,11 +7,16 @@ module.exports = {
         if (session == null) {
           redirect(req, res, '/login');
         } else {
-          session.ttl = Session.getNewTtl();
-          session.save();
-          res.cookie('session', session.hash, { maxAge: config.session.expire });
           session.getUser().success(function(user) {
-            res.render('index', { title: config.title, user : user });
+            if (user == null) {
+              redirect(req, res, '/login');
+            } else {
+              console.log('[debug] user : ' + JSON.stringify(user));
+              session.ttl = Session.getNewTtl();
+              session.save();
+              res.cookie('session', session.hash, { maxAge: config.session.expire });
+              res.render('index', { user : user });
+            }
           });
         }
       });

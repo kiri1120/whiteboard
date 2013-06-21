@@ -20,9 +20,31 @@ module.exports = {
       position_y  : toInt(data.position_y),
     };
     Tag.find(updatedata.id).success(function(tag) {
-      tag.updateAttributes(updatedata).success(function(updatedTag) {
-        broadcast(socket, 'updateTag', updatedTag);
-      });
+      if(tag == null || tag.visible == false) {
+        socket.emit('error', '操作できない付箋です。');
+      } else {
+        tag.updateAttributes(updatedata).success(function(updatedTag) {
+          broadcast(socket, 'updateTag', updatedTag);
+        }).error(function(e) {
+          socket.emit('error', e);
+        });
+      }
+    });
+  },
+  closeTag : function(socket, data) {
+    var id = toInt(data);
+    console.log('[debug] close tag id : ' + id);
+    Tag.find(id).success(function(tag) {
+      if(tag == null || tag.visible == false) {
+        socket.emit('error', '操作できない付箋です。');
+      } else {
+        tag.visible = false;
+        tag.save().success(function() {
+          broadcast(socket, 'deleteTag', id);
+        }).error(function(e) {
+          socket.emit('error', e);
+        });
+      }
     });
   },
 };

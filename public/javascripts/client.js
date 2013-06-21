@@ -56,6 +56,11 @@ $(function() {
     updateTag(data);
   });
 
+  // 付箋削除
+  socket.on('deleteTag', function(data) {
+    deleteTag(data);
+  });
+
   // エラー通知
   socket.on('error', function(error){
     errorShow(error);
@@ -152,12 +157,29 @@ $(function() {
     taghtml.find('.close').click(function() {
       closeTag(taghtml);
     });
+
+/*
+    taghtml.find('.colorSelector').ColorPicker({
+      color: tag.background_color,
+      onShow: function (colpkr) {
+        $(colpkr).fadeIn(500);
+        return false;
+      },
+      onHide: function (colpkr) {
+        $(colpkr).fadeOut(500);
+        return false;
+      },
+      onChange: function (hsb, hex, rgb) {
+        taghtml.css('backgroundColor', '#' + hex);
+      }
+    });
+*/
   }
 
   // change tag event
   function changeTag(taghtml) {
     var data = {
-      id          : taghtml.attr('id').replace(/tag\-/, ''),
+      id          : getTagId(taghtml),
       size_x      : taghtml.css('width'),
       size_y      : taghtml.css('height'),
       position_x  : taghtml.css('left'),
@@ -168,7 +190,7 @@ $(function() {
 
   // close tag event
   function closeTag(tag) {
-    tag.hide();
+    socket.emit('closeTag', getTagId(tag));
   }
 
   // update tag
@@ -182,6 +204,16 @@ $(function() {
       height          : tag.size_y,
     };
     $('#tag-' + tag.id).css(css);
+  }
+
+  // delete tag
+  function deleteTag(id) {
+    $('#tag-' + id).remove();
+  }
+
+  // get tag.id
+  function getTagId(taghtml) {
+    return taghtml.attr('id').replace(/tag\-/, '');
   }
 
   // show error message
