@@ -47,6 +47,12 @@ uid = function(size) {
   return buf.join('');
 };
 sprintf = SPF.sprintf;
+toString  = JSON.stringify
+
+// debug
+debug = function(name, data) {
+  console.log('[debug]' + name + ' : ' + toString());
+}
 
 // models imports
 var sequelize = new ORM(config.mysql);

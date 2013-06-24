@@ -7,18 +7,27 @@ var tagControl   = require('./tag');
 module.exports = function(socket) {
   // initStart
   socket.emit('initStart');
-  Board.findAll({ where: { visible: true } }).success(function(boards) {
+  Board.findAll({ where: { visible: true }}).success(function(boards) {
+    var boardIds = [];
     boards.forEach(function(board) {
+      boardIds.push(board.id);
       socket.emit('createBoard', board);
-      board.getTags({ where : { visible : true }}).success(function(tags) {
-        tags.forEach(function(tag) {
-          socket.emit('createTag', tag);
-        });
+    });
+    Tag.findAll({ where : { id : boardIds, visible : true }}).success(function(tags) {
+      tags.forEach(function(tag) {
+        socket.emit('createTag', tag);
       });
     });
     socket.emit('initEnd');
   })
   // initEnd
+
+  // get session
+  socket.on('session', function(data) {
+    Session.find({ where : [ 'hash = ? AND ttl > ?', data, new Date() ] }).success(function(session) {
+      console.log('[debug] get session user : ' + toString(session));
+    });
+  });
 
   // create board
   socket.on('createBoard', function(data) {

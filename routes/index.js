@@ -3,19 +3,22 @@ module.exports = {
     if (req.cookies.session == null) {
       redirect(req, res, '/login');
     } else {
-      Session.find({ where : [ 'hash = ? AND ttl > ?', req.cookies.session, new Date()] }).success(function(session){
+      Session.find({
+        where   : [ 'hash = ? AND ttl > ?', req.cookies.session, new Date()],
+      }).success(function(session) {
         if (session == null) {
+          debug('session', session);
           redirect(req, res, '/login');
         } else {
           session.getUser().success(function(user) {
             if (user == null) {
+              debug('user', user);
               redirect(req, res, '/login');
             } else {
-              console.log('[debug] user : ' + JSON.stringify(user));
               session.ttl = Session.getNewTtl();
               session.save();
               res.cookie('session', session.hash, { maxAge: config.session.expire });
-              res.render('index', { user : user });
+              res.render('index', { user : session.user });
             }
           });
         }

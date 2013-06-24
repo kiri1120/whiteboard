@@ -19,11 +19,16 @@ $(function() {
   // socket.io initialize
   var socket = io.connect(uri);
 
+  // get cookies
+  var cookies = getCookies();
+
   // 初期化
   socket.on('initStart', function(){
     $('#carousel .carousel-indicators').empty();
     $('#carousel .carousel-inner').empty();
     $('#carousel .tag').remove();
+
+    socket.emit('session', cookies.session);
   });
 
   // 初期化完了
@@ -222,4 +227,19 @@ $(function() {
     $('#error').modal('show');
   }
 
+  function getCookies() {
+    var result = {};
+    var allcookies = document.cookie;
+
+    if (allcookies != '') {
+      var cookies = allcookies.split(';');
+
+      for(var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].split( '=' );
+        result[cookie[0]] = decodeURIComponent(cookie[1]);
+      }
+    }
+
+    return result;
+  }
 });
