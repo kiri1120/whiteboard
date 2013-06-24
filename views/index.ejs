@@ -9,15 +9,11 @@
 
     <link rel='stylesheet' href='/assets/bootstrap/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/assets/jquery-ui-bootstrap/jquery-ui-1.10.0.custom.css' />
-    <link rel="stylesheet" href='/assets/colorpicker/css/colorpicker.css' />
     <link rel='stylesheet' href='./stylesheets/style.css' />
 
     <script src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
     <script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js'></script>
     <script src='/assets/bootstrap/js/bootstrap.min.js'></script>
-    <script src="/assets/colorpicker/js/colorpicker.js"></script>
-    <script src="/assets/colorpicker/js/eye.js"></script>
-    <script src="/assets/colorpicker/js/utils.js"></script>
     <script src='./socket.io/socket.io.js'></script>
     <script src='./javascripts/client.js'></script>
   </head>
@@ -62,11 +58,11 @@
       </div>
     </div>
 
-    <div id='carousel' class='carousel slide'>
+    <div id='carousel' class='carousel slide' data-interval='0'>
       <ol class='carousel-indicators'></ol>
       <div class='carousel-inner'></div>
-      <a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>
-      <a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>
+      <a class='carousel-control hide left' href='#carousel' data-slide='prev'>&lsaquo;</a>
+      <a class='carousel-control hide right' href='#carousel' data-slide='next'>&rsaquo;</a>
     </div>
 
     <!-- tag reference -->

@@ -13,19 +13,23 @@ module.exports = function(socket) {
       boardIds.push(board.id);
       socket.emit('createBoard', board);
     });
-    Tag.findAll({ where : { id : boardIds, visible : true }}).success(function(tags) {
+    Tag.findAll({ where : { BoardId : boardIds, visible : true }}).success(function(tags) {
       tags.forEach(function(tag) {
         socket.emit('createTag', tag);
       });
+      socket.emit('initEnd');
     });
-    socket.emit('initEnd');
   })
   // initEnd
 
   // get session
   socket.on('session', function(data) {
     Session.find({ where : [ 'hash = ? AND ttl > ?', data, new Date() ] }).success(function(session) {
-      console.log('[debug] get session user : ' + toString(session));
+      if (session != null) {
+        session.getUser().success(function(user) {
+          console.log('[debug] get session user : ' + toString(user));
+        });
+      }
     });
   });
 

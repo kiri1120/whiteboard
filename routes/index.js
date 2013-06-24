@@ -12,13 +12,12 @@ module.exports = {
         } else {
           session.getUser().success(function(user) {
             if (user == null) {
-              debug('user', user);
               redirect(req, res, '/login');
             } else {
               session.ttl = Session.getNewTtl();
               session.save();
               res.cookie('session', session.hash, { maxAge: config.session.expire });
-              res.render('index', { user : session.user });
+              res.render('index', { user : user });
             }
           });
         }

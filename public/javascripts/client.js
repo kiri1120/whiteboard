@@ -33,7 +33,6 @@ $(function() {
 
   // 初期化完了
   socket.on('initEnd', function() {
-    $('#carousel').carousel('next');
   });
 
   // ホワイトボード作成
@@ -96,19 +95,29 @@ $(function() {
   //----------------------- functions -----------------------
   // create board
   function createBoard(board) {
-    $('#carousel .carousel-indicators').append($('<li>').attr('data-target', '#carousel').attr('data-slide-to', boardsCount));
-    $('#carousel .carousel-inner').append('<div id="board-' + board.id + '" class="item"><canvas class="canvas"></canvas><div class="carousel-caption pull-top"><h4>' + board.name + '</h4></div></div>');
-    $('#carousel').carousel(carouselOption);
-
-    // create tag event
-    $('#carousel canvas').click(function(event) {
+    var html = $('<div>').attr('id', 'board-' + board.id).addClass('item');
+    var canvas = $('<canvas>').addClass('canvas').click(function(event) {
       var data = {
-        BoardId   : getActiveBoardId(),
+        BoardId   : board.id,
         position_x: event.pageX,
         position_y: event.pageY - 60
       }
       socket.emit('createTag', data);
     });
+    var caption = $('<div>').addClass('carousel-caption pull-top').append($('<h4>').text(board.name));
+    var indicator = $('<li>').attr('data-target', '#carousel').attr('data-slide-to', boardsCount);
+    if (boardsCount == 0) {
+      html.addClass('active');
+      indicator.addClass('active');
+    } else {
+      $('#carousel .carousel-control').show();
+    }
+
+    html.append(canvas);
+    html.append(caption);
+
+    $('#carousel .carousel-inner').append(html);
+    $('#carousel .carousel-indicators').append(indicator);
 
     boardsCount++;
   }
@@ -123,7 +132,11 @@ $(function() {
     $('#carousel .carousel-indicators li:last').remove();
     $('#board-' + id).remove();
 
-    $('#carousel').carousel(carouselOption);
+    boardsCount--;
+
+    if (boardsCount == 1) {
+      $('#carousel .carousel-control').hide();
+    }
   }
 
   // rename board
