@@ -9,10 +9,10 @@ $(function() {
   // 付箋のテンプレート初期化
   $('#tagreference').hover(
     function () {
-      $(this).find('.message').show();
+      $(this).find('.tagforms').show();
     },
     function () {
-      $(this).find('.message').hide();
+      $(this).find('.tagforms').hide();
     }
   );
 
@@ -24,15 +24,12 @@ $(function() {
 
   // 初期化
   socket.on('initStart', function(){
+    boardsCount = 0;
     $('#carousel .carousel-indicators').empty();
     $('#carousel .carousel-inner').empty();
     $('#carousel .tag').remove();
 
     socket.emit('session', cookies.session);
-  });
-
-  // 初期化完了
-  socket.on('initEnd', function() {
   });
 
   // ホワイトボード作成
@@ -63,6 +60,11 @@ $(function() {
   // 付箋削除
   socket.on('deleteTag', function(data) {
     deleteTag(data);
+  });
+
+  // メッセージ表示
+  socket.on('showMessage', function(data) {
+    showMessage(data.user, data.message);
   });
 
   // エラー通知
@@ -106,6 +108,7 @@ $(function() {
     });
     var caption = $('<div>').addClass('carousel-caption pull-top').append($('<h4>').text(board.name));
     var indicator = $('<li>').attr('data-target', '#carousel').attr('data-slide-to', boardsCount);
+
     if (boardsCount == 0) {
       html.addClass('active');
       indicator.addClass('active');
@@ -150,7 +153,7 @@ $(function() {
 
   // create tag
   function createTag(tag) {
-    var taghtml = $('#tagreference').clone(true);
+    var html = $('#tagreference').clone(true);
     var css = {
       color           : tag.color,
       backgroundColor : tag.background_color,
@@ -160,48 +163,61 @@ $(function() {
       height          : tag.size_y,
     };
 
-    $('#board-' + tag.BoardId).append(taghtml);
-    taghtml.attr('id', 'tag-' + tag.id);
-    taghtml.css(css);
-    taghtml.show();
+    $('#board-' + tag.BoardId).append(html);
+    html.attr('id', 'tag-' + tag.id);
+    html.css(css);
 
-    taghtml.resizable({ stop : function() {
-      changeTag(taghtml);
-    }});
-    taghtml.draggable({ stop : function() {
-      changeTag(taghtml);
+    // リサイズ
+    html.resizable({ stop : function() {
+      changeTag(html);
     }});
 
-    taghtml.find('.close').click(function() {
-      closeTag(taghtml);
+    // 移動
+    html.draggable({ stop : function() {
+      changeTag(html);
+    }});
+
+    // 付箋をはがす
+    html.find('.close').click(function() {
+      closeTag(html);
     });
 
-/*
-    taghtml.find('.colorSelector').ColorPicker({
-      color: tag.background_color,
-      onShow: function (colpkr) {
-        $(colpkr).fadeIn(500);
-        return false;
-      },
-      onHide: function (colpkr) {
-        $(colpkr).fadeOut(500);
-        return false;
-      },
-      onChange: function (hsb, hex, rgb) {
-        taghtml.css('backgroundColor', '#' + hex);
-      }
+    // 付箋に書き込む
+    html.find('.messageform').submit(function() {
+      commitMessage(html);
+      return false;
     });
-*/
+
+    // 背景色
+    var backCS = html.find('input[name=back-colorselector]');
+    backCS.val(css.backgroundColor);
+    backCS.change(function() {
+      html.css('background-color', backCS.val());
+      changeTag(html);
+    });
+
+    // 文字色
+    var textCS = html.find('input[name=text-colorselector]');
+    textCS.val(css.color);
+    textCS.change(function() {
+      html.css('color', textCS.val());
+      changeTag(html);
+    });
+
+
+    html.show();
   }
 
   // change tag event
-  function changeTag(taghtml) {
+  function changeTag(html) {
     var data = {
-      id          : getTagId(taghtml),
-      size_x      : taghtml.css('width'),
-      size_y      : taghtml.css('height'),
-      position_x  : taghtml.css('left'),
-      position_y  : taghtml.css('top'),
+      id                : getTagId(html),
+      color             : rgbToHex(html.css('color')),
+      background_color  : rgbToHex(html.css('background-color')),
+      size_x            : html.css('width'),
+      size_y            : html.css('height'),
+      position_x        : html.css('left'),
+      position_y        : html.css('top'),
     };
     socket.emit('changeTag', data);
   }
@@ -230,8 +246,22 @@ $(function() {
   }
 
   // get tag.id
-  function getTagId(taghtml) {
-    return taghtml.attr('id').replace(/tag\-/, '');
+  function getTagId(html) {
+    return html.attr('id').replace(/tag\-/, '');
+  }
+
+  // commit message
+  function commitMessage(html) {
+    var msghtml = html.find('.messageform input[name=message]');
+    socket.emit('commitMessage', { tagid : getTagId(html), message : msghtml.val() });
+    msghtml.val('');
+  }
+
+  // show message
+  function showMessage(user, message) {
+    var taghtml = $('#tag-' + message.TagId);
+    var html = $('<div>').addClass('message').append($('<p>').html('<strong>' + user.nickname + '</strong>＞' + message.message));
+    taghtml.find('.messages').append(html);
   }
 
   // show error message
@@ -240,6 +270,7 @@ $(function() {
     $('#error').modal('show');
   }
 
+  // parse cookies
   function getCookies() {
     var result = {};
     var allcookies = document.cookie;
@@ -254,5 +285,21 @@ $(function() {
     }
 
     return result;
+  }
+
+  function rgbToHex(rgb) {
+    var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);  
+
+    if (parts != null && parts.length == 4) {
+      delete parts[0];  
+      for (var i = 1; i <= 3; i++) {
+        parts[i] = parseInt(parts[i]).toString(16);
+        if (parts[i].length == 1) {
+          parts[i] = '0' + parts[i];
+        }
+      }
+      return "#" + parts.join("");
+    }
+    return rgb;
   }
 });

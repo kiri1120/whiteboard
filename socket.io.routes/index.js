@@ -1,33 +1,47 @@
 // socket.io コントローラ
 
 // require modules
-var boardControl = require('./board');
-var tagControl   = require('./tag');
+var boardControl    = require('./board'),
+    tagControl      = require('./tag'),
+    messageControl  = require('./message');
 
 module.exports = function(socket) {
   // initStart
   socket.emit('initStart');
-  Board.findAll({ where: { visible: true }}).success(function(boards) {
-    var boardIds = [];
-    boards.forEach(function(board) {
-      boardIds.push(board.id);
-      socket.emit('createBoard', board);
-    });
-    Tag.findAll({ where : { BoardId : boardIds, visible : true }}).success(function(tags) {
-      tags.forEach(function(tag) {
-        socket.emit('createTag', tag);
+  User.findAll().success(function(users){
+    Board.findAll({ where: { visible: true }}).success(function(boards) {
+      var boardIds = [];
+      boards.forEach(function(board) {
+        boardIds.push(board.id);
+        socket.emit('createBoard', board);
       });
-      socket.emit('initEnd');
+      Tag.findAll({ where : { BoardId : boardIds, visible : true }}).success(function(tags) {
+        var tagIds = [];
+        tags.forEach(function(tag) {
+          tagIds.push(tag.id);
+          socket.emit('createTag', tag);
+        });
+        Message.findAll({ where : { TagId : tagIds }}).success(function(messages) {
+          messages.forEach(function(message) {
+            users.forEach(function(user) {
+              if (user.id == message.UserId) {
+                socket.emit('showMessage', { user: user, message : message});
+              }
+            });
+          });
+        });
+      });
     });
-  })
-  // initEnd
+  });
 
   // get session
   socket.on('session', function(data) {
     Session.find({ where : [ 'hash = ? AND ttl > ?', data, new Date() ] }).success(function(session) {
       if (session != null) {
         session.getUser().success(function(user) {
-          console.log('[debug] get session user : ' + toString(user));
+          if (user != null) {
+            socket.set('user', user);
+          }
         });
       }
     });
@@ -61,5 +75,10 @@ module.exports = function(socket) {
   // close tag
   socket.on('closeTag', function(data) {
     tagControl.closeTag(socket, data);
+  });
+
+  // commit message
+  socket.on('commitMessage', function(data) {
+    messageControl.commitMessage(socket, data);
   });
 }

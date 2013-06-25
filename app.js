@@ -20,6 +20,7 @@ config = require('config');
 toText = function(data) {
   data = sanitize(data).trim();
   data = sanitize(data).xss();
+  data = sanitize(data).escape();
   return data;
 };
 toInt = function(data) {
@@ -51,7 +52,7 @@ toString  = JSON.stringify
 
 // debug
 debug = function(name, data) {
-  console.log('[debug]' + name + ' : ' + toString());
+  console.log('[debug] ' + name + ' : ' + toString(data));
 }
 
 // models imports

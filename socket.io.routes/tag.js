@@ -13,11 +13,13 @@ module.exports = {
   },
   updateTag : function(socket, data) {
     var updatedata = {
-      id          : toInt(data.id),
-      size_x      : toInt(data.size_x),
-      size_y      : toInt(data.size_y),
-      position_x  : toInt(data.position_x),
-      position_y  : toInt(data.position_y),
+      id                : toInt(data.id),
+      color             : toText(data.color),
+      background_color  : toText(data.background_color),
+      size_x            : toInt(data.size_x),
+      size_y            : toInt(data.size_y),
+      position_x        : toInt(data.position_x),
+      position_y        : toInt(data.position_y),
     };
     Tag.find(updatedata.id).success(function(tag) {
       if(tag == null || tag.visible == false) {
