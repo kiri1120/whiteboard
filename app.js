@@ -50,11 +50,6 @@ uid = function(size) {
 sprintf = SPF.sprintf;
 toString  = JSON.stringify
 
-// debug
-debug = function(name, data) {
-  console.log('[debug] ' + name + ' : ' + toString(data));
-}
-
 // models imports
 var sequelize = new ORM(config.mysql);
 Board   = sequelize.import(__dirname + "/models/board");
@@ -105,6 +100,6 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 
 // express 3.x Socket.IO compatibility
 var io = SocketIO.listen(server);
-server.listen(config.port);
+server.listen(app.get('port'));
 io.sockets.on('connection', require('./socket.io.routes'));
 

@@ -35,7 +35,6 @@ module.exports = {
   },
   closeTag : function(socket, data) {
     var id = toInt(data);
-    console.log('[debug] close tag id : ' + id);
     Tag.find(id).success(function(tag) {
       if(tag == null || tag.visible == false) {
         socket.emit('error', '‘€ì‚Å‚«‚È‚¢•tâ³‚Å‚·B');

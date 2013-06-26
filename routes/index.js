@@ -7,7 +7,6 @@ module.exports = {
         where   : [ 'hash = ? AND ttl > ?', req.cookies.session, new Date()],
       }).success(function(session) {
         if (session == null) {
-          debug('session', session);
           redirect(req, res, '/login');
         } else {
           session.getUser().success(function(user) {
