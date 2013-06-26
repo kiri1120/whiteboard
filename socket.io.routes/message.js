@@ -1,3 +1,4 @@
+// メッセージ処理
 module.exports = {
   commitMessage : function(socket, data) {
     var tagid = toInt(data.tagid);

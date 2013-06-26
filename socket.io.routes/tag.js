@@ -1,4 +1,4 @@
-// �tⳃR���g���[��
+// 付箋コントローラ
 module.exports = {
   createTag : function(socket, data) {
     var BoardId = toInt(data.BoardId);
@@ -23,7 +23,7 @@ module.exports = {
     };
     Tag.find(updatedata.id).success(function(tag) {
       if(tag == null || tag.visible == false) {
-        socket.emit('error', '����ł��Ȃ��tⳂł��B');
+        socket.emit('error', '操作できない付箋です。');
       } else {
         tag.updateAttributes(updatedata).success(function(updatedTag) {
           broadcast(socket, 'updateTag', updatedTag);
@@ -37,7 +37,7 @@ module.exports = {
     var id = toInt(data);
     Tag.find(id).success(function(tag) {
       if(tag == null || tag.visible == false) {
-        socket.emit('error', '����ł��Ȃ��tⳂł��B');
+        socket.emit('error', '操作できない付箋です。');
       } else {
         tag.visible = false;
         tag.save().success(function() {
