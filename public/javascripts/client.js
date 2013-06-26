@@ -238,6 +238,8 @@ $(function() {
       height          : tag.size_y,
     };
     $('#tag-' + tag.id).css(css);
+    html.find('input[name=back-colorselector]').val(tag.background_color);
+    html.find('input[name=text-colorselector]').val(tag.color);
   }
 
   // delete tag

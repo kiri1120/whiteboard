@@ -2,6 +2,10 @@
 module.exports = {
   createBoard : function(socket, data) {
     var name = toText(data);
+    if (name == "") {
+      socket.emit('error', 'can not rename board to empty');
+      return;
+    }
     Board.create({ name : name }).success(function(board) {
       broadcast(socket, 'createBoard', board);
     });
