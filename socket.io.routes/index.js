@@ -77,6 +77,11 @@ module.exports = function(socket) {
     tagControl.closeTag(socket, data);
   });
 
+  // up zindex tag
+  socket.on('upZIndexTag', function(data) {
+    tagControl.upZIndexTag(socket, data);
+  });
+
   // commit message
   socket.on('commitMessage', function(data) {
     messageControl.commitMessage(socket, data);

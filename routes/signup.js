@@ -36,7 +36,7 @@ module.exports = {
     }
 
     if (error != null) {
-      res.render('error', error);
+      res.render('error', { error : error });
     }
   },
 };

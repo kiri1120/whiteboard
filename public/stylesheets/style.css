@@ -51,3 +51,7 @@ body {
 .fixed-textcolor {
   color : #333333;
 }
+
+.messages {
+  margin-top : 5px;
+}

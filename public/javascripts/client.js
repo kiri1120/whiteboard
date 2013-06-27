@@ -161,6 +161,7 @@ $(function() {
       top             : tag.position_y,
       width           : tag.size_x,
       height          : tag.size_y,
+      zIndex          : tag.TagIndexId,
     };
 
     $('#board-' + tag.BoardId).append(html);
@@ -173,9 +174,10 @@ $(function() {
     }});
 
     // 移動
-    html.draggable({ stop : function() {
+    html.draggable({ handle : '.move', stop : function() {
       changeTag(html);
     }});
+    html.find('.move').tooltip({ title : '移動'});
 
     // 付箋をはがす
     html.find('.close').click(function() {
@@ -204,6 +206,15 @@ $(function() {
       changeTag(html);
     });
 
+    // 表に移動
+    html.find('.zindex-up').tooltip({ title : '表に移動' }).click(function() {
+      socket.emit('upZIndexTag', getTagId(html));
+    });
+
+    // 裏に移動
+    html.find('.zindex-down').tooltip({ title : '裏に移動' }).click(function() {
+      socket.emit('downZIndexTag', getTagId(html));
+    });
 
     html.show();
   }

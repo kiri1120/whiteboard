@@ -10,7 +10,8 @@ var Board   = sequelize.import(__dirname + '/models/board'),
     Tag     = sequelize.import(__dirname + '/models/tag'),
     Message = sequelize.import(__dirname + '/models/message'),
     User    = sequelize.import(__dirname + '/models/user'),
-    Session = sequelize.import(__dirname + '/models/session');
+    Session = sequelize.import(__dirname + '/models/session'),
+    TagIndex = sequelize.import(__dirname + '/models/tagindex');
 
 // Associations
 Board.hasMany(Tag);
@@ -20,6 +21,8 @@ Message.belongsTo(Tag);
 User.hasMany(Message);
 User.hasMany(Session);
 Session.belongsTo(User);
+Tag.belongsTo(TagIndex);
+TagIndex.hasOne(Tag);
 
 // initialize
 sequelize.sync({ force : true }).success(function() {

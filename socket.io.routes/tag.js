@@ -5,9 +5,13 @@ module.exports = {
     var position_x = toInt(data.position_x);
     var position_y = toInt(data.position_y);
     Board.find(BoardId).success(function(board) {
-      var tag = Tag.build({ position_x : position_x, position_y : position_y });
-      board.addTag(tag).success(function(createdTag) {
-        broadcast(socket, 'createTag', createdTag);
+      TagIndex.create().success(function(tagIndex) {
+        var tag = Tag.build({ position_x : position_x, position_y : position_y });
+        board.addTag(tag).success(function(createdTag) {
+          createdTag.setTagIndex(tagIndex).success(function(){
+            broadcast(socket, 'createTag', createdTag);
+          });
+        });
       });
     });
   },
@@ -46,6 +50,12 @@ module.exports = {
           socket.emit('error', e);
         });
       }
+    });
+  },
+  upZIndexTag : function(socket, data) {
+    var id = toInt(data);
+    Tag.find(id).success(function(tag) {
+      
     });
   },
 };
