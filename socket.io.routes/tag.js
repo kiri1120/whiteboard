@@ -2,8 +2,8 @@
 module.exports = {
   createTag : function(socket, data) {
     var BoardId = toInt(data.BoardId);
-    var position_x = toInt(data.position_x);
-    var position_y = toInt(data.position_y);
+    var top = toInt(data.top);
+    var left = toInt(data.left);
 
     Board.find(BoardId).success(function(board) {
       if (board == null) {
@@ -15,13 +15,17 @@ module.exports = {
           socket.emit('error', '一枚のホワイトボードに貼れる付箋の上限に達しました。（上限：' + config.maxtag +'）');
           return;
         }
-        TagIndex.create().success(function(tagIndex) {
+        Tag.max('zIndex').success(function(zIndexMax) {
           var tag = {
-            position_x  : position_x,
-            position_y  : position_y,
-            BoardId     : BoardId,
-            TagIndexId  : TagIndex.id
+            top     : top,
+            left    : left,
+            BoardId : BoardId,
           };
+          if (isNaN(zIndexMax)) {
+            tag.zIndex = 1;
+          } else {
+            tag.zIndex = zIndexMax + 1;
+          }
           Tag.create(tag).success(function(createdTag) {
             broadcast(socket, 'createTag', createdTag);
           });
@@ -30,20 +34,18 @@ module.exports = {
     });
   },
   updateTag : function(socket, data) {
-    var updatedata = {
-      id                : toInt(data.id),
-      color             : toText(data.color),
-      background_color  : toText(data.background_color),
-      size_x            : toInt(data.size_x),
-      size_y            : toInt(data.size_y),
-      position_x        : toInt(data.position_x),
-      position_y        : toInt(data.position_y),
-    };
-    Tag.find(updatedata.id).success(function(tag) {
+    var id = toInt(data.id);
+    Tag.find(id).success(function(tag) {
       if(tag == null) {
         return;
       }
-      tag.updateAttributes(updatedata).success(function(updatedTag) {
+      tag.color           = toText(data.color);
+      tag.backgroundColor = toText(data.backgroundColor);
+      tag.width           = toInt(data.width);
+      tag.height          = toInt(data.height);
+      tag.top             = toInt(data.top);
+      tag.left            = toInt(data.left);
+      tag.save().success(function(updatedTag) {
         broadcast(socket, 'updateTag', updatedTag);
       }).error(function(e) {
         socket.emit('error', e);
@@ -70,40 +72,10 @@ module.exports = {
       if (tag == null) {
         return;
       }
-      Tag.find({ where : [ 'BoardId = ? AND visible = ? AND TagIndexId > ?', tag.BoardId, true, tag.TagIndexId ] }).success(function(nextTag) {
-        if (nextTag == null) {
-          return;
-        }
-        var tmpTagIndexId = tag.TagIndexId;
-        tag.TagIndexId = nextTag.TagIndexId;
-        nextTag.TagIndexId = tmpTagIndexId;
+      Tag.max('zIndex').success(function(zIndexMax) {
+        tag.zIndex = zIndexMax + 1;
         tag.save().success(function(savedTag) {
           broadcast(socket, 'updateTag', savedTag);
-        });
-        nextTag.save().success(function(savedNextTag) {
-          broadcast(socket, 'updateTag', savedNextTag);
-        });
-      });
-    });
-  },
-  downZIndexTag : function(socket, data) {
-    var id = toInt(data);
-    Tag.find(id).success(function(tag) {
-      if (tag == null) {
-        return;
-      }
-      Tag.find({ where : [ 'BoardId = ? AND visible = ? AND TagIndexId < ?', tag.BoardId, true, tag.TagIndexId ] }).success(function(prevTag) {
-        if (prevTag == null) {
-          return;
-        }
-        var tmpTagIndexId = tag.TagIndexId;
-        tag.TagIndexId = prevTag.TagIndexId;
-        prevTag.TagIndexId = tmpTagIndexId;
-        tag.save().success(function(savedTag) {
-          broadcast(socket, 'updateTag', savedTag);
-        });
-        prevTag.save().success(function(savedPrevTag) {
-          broadcast(socket, 'updateTag', savedPrevTag);
         });
       });
     });

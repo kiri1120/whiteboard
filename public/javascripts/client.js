@@ -3,19 +3,10 @@ var boardsCount = 0;
 
 // options
 var uri = "http://" + location.hostname + ":3000/";
-var carouselOption = { interval : false };
+var navbarHeight = 60;
+var messageformHeight = 100;
 
 $(function() {
-  // 付箋のテンプレート初期化
-  $('#tagreference').hover(
-    function () {
-      $(this).find('.tagforms').show();
-    },
-    function () {
-      $(this).find('.tagforms').hide();
-    }
-  );
-
   // socket.io initialize
   var socket = io.connect(uri);
 
@@ -100,9 +91,9 @@ $(function() {
     var html = $('<div>').attr('id', 'board-' + board.id).addClass('item');
     var canvas = $('<canvas>').addClass('canvas').click(function(event) {
       var data = {
-        BoardId   : board.id,
-        position_x: event.pageX,
-        position_y: event.pageY - 60
+        BoardId : board.id,
+        left    : event.pageX,
+        top     : event.pageY - navbarHeight,
       }
       socket.emit('createTag', data);
     });
@@ -156,17 +147,22 @@ $(function() {
     var html = $('#tagreference').clone(true);
     var css = {
       color           : tag.color,
-      backgroundColor : tag.background_color,
-      left            : tag.position_x,
-      top             : tag.position_y,
-      width           : tag.size_x,
-      height          : tag.size_y,
-      zIndex          : tag.TagIndexId,
+      backgroundColor : tag.backgroundColor,
+      left            : tag.left,
+      top             : tag.top,
+      width           : tag.width,
+      height          : tag.height,
+      zIndex          : tag.zIndex,
     };
 
     $('#board-' + tag.BoardId).append(html);
     html.attr('id', 'tag-' + tag.id);
     html.css(css);
+
+    html.find('.messages').css({
+      width : tag.width,
+      height : tag.height - messageformHeight,
+    });
 
     // リサイズ
     html.resizable({ stop : function() {
@@ -207,13 +203,8 @@ $(function() {
     });
 
     // 表に移動
-    html.find('.zindex-up').tooltip({ title : '表に移動' }).click(function() {
+    html.find('.zindex-up').tooltip({ title : '最前面に移動' }).click(function() {
       socket.emit('upZIndexTag', getTagId(html));
-    });
-
-    // 裏に移動
-    html.find('.zindex-down').tooltip({ title : '裏に移動' }).click(function() {
-      socket.emit('downZIndexTag', getTagId(html));
     });
 
     html.show();
@@ -222,13 +213,13 @@ $(function() {
   // change tag event
   function changeTag(html) {
     var data = {
-      id                : getTagId(html),
-      color             : rgbToHex(html.css('color')),
-      background_color  : rgbToHex(html.css('background-color')),
-      size_x            : html.css('width'),
-      size_y            : html.css('height'),
-      position_x        : html.css('left'),
-      position_y        : html.css('top'),
+      id              : getTagId(html),
+      color           : rgbToHex(html.css('color')),
+      backgroundColor : rgbToHex(html.css('background-color')),
+      width           : html.css('width'),
+      height          : html.css('height'),
+      left            : html.css('left'),
+      top             : html.css('top'),
     };
     socket.emit('changeTag', data);
   }
@@ -242,17 +233,22 @@ $(function() {
   function updateTag(tag) {
     var css = {
       color           : tag.color,
-      backgroundColor : tag.background_color,
-      left            : tag.position_x,
-      top             : tag.position_y,
-      width           : tag.size_x,
-      height          : tag.size_y,
-      zIndex          : tag.TagIndexId,
+      backgroundColor : tag.backgroundColor,
+      left            : tag.left,
+      top             : tag.top,
+      width           : tag.width,
+      height          : tag.height,
+      zIndex          : tag.zIndex,
     };
     var html = $('#tag-' + tag.id);
     html.css(css);
-    html.find('input[name=back-colorselector]').val(tag.background_color);
+    html.find('input[name=back-colorselector]').val(tag.backgroundColor);
     html.find('input[name=text-colorselector]').val(tag.color);
+
+    html.find('.messages').css({
+      width : tag.width,
+      height : tag.height - messageformHeight,
+    });
   }
 
   // delete tag
