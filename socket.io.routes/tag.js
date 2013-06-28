@@ -55,7 +55,45 @@ module.exports = {
   upZIndexTag : function(socket, data) {
     var id = toInt(data);
     Tag.find(id).success(function(tag) {
-      
+      if (tag == null) {
+        return;
+      }
+      Tag.find({ where : [ 'BoardId = ? AND visible = ? AND TagIndexId > ?', tag.BoardId, true, tag.TagIndexId ] }).success(function(nextTag) {
+        if (nextTag == null) {
+          return;
+        }
+        var tmpTagIndexId = tag.TagIndexId;
+        tag.TagIndexId = nextTag.TagIndexId;
+        nextTag.TagIndexId = tmpTagIndexId;
+        tag.save().success(function(savedTag) {
+          broadcast(socket, 'updateTag', savedTag);
+        });
+        nextTag.save().success(function(savedNextTag) {
+          broadcast(socket, 'updateTag', savedNextTag);
+        });
+      });
+    });
+  },
+  downZIndexTag : function(socket, data) {
+    var id = toInt(data);
+    Tag.find(id).success(function(tag) {
+      if (tag == null) {
+        return;
+      }
+      Tag.find({ where : [ 'BoardId = ? AND visible = ? AND TagIndexId < ?', tag.BoardId, true, tag.TagIndexId ] }).success(function(prevTag) {
+        if (prevTag == null) {
+          return;
+        }
+        var tmpTagIndexId = tag.TagIndexId;
+        tag.TagIndexId = prevTag.TagIndexId;
+        prevTag.TagIndexId = tmpTagIndexId;
+        tag.save().success(function(savedTag) {
+          broadcast(socket, 'updateTag', savedTag);
+        });
+        prevTag.save().success(function(savedPrevTag) {
+          broadcast(socket, 'updateTag', savedPrevTag);
+        });
+      });
     });
   },
 };

@@ -10,8 +10,9 @@ var express   = require('express'),
     SocketIO  = require('socket.io'),
     check     = require('validator').check,
     sanitize  = require('validator').sanitize,
-    routes    = require('./routes'),
+    crypto    = require('crypto'),
     SPF       = require('sprintf');
+    routes    = require('./routes'),
 
 // global settings
 config = require('config');
@@ -34,7 +35,7 @@ redirect = function(req, res, target) {
   res.redirect('http://' + req.header('host') + target);
 };
 hash = function(str) {
-  return require('crypto').createHash('sha1').update(str, 'utf8').digest('hex');
+  return crypto.createHash('sha1').update(str, 'utf8').digest('hex');
 };
 uid = function(size) {
   size = size || 32;
@@ -48,7 +49,7 @@ uid = function(size) {
   return buf.join('');
 };
 sprintf = SPF.sprintf;
-toString  = JSON.stringify
+toString  = JSON.stringify;
 
 // models imports
 var sequelize = new ORM(config.mysql);
@@ -101,7 +102,6 @@ var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-// express 3.x Socket.IO compatibility
 var io = SocketIO.listen(server);
 server.listen(app.get('port'));
 io.sockets.on('connection', require('./socket.io.routes'));
