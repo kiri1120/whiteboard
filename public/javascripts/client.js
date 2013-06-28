@@ -249,7 +249,8 @@ $(function() {
       height          : tag.size_y,
       zIndex          : tag.TagIndexId,
     };
-    $('#tag-' + tag.id).css(css);
+    var html = $('#tag-' + tag.id);
+    html.css(css);
     html.find('input[name=back-colorselector]').val(tag.background_color);
     html.find('input[name=text-colorselector]').val(tag.color);
   }

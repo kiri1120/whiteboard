@@ -4,11 +4,25 @@ module.exports = {
     var BoardId = toInt(data.BoardId);
     var position_x = toInt(data.position_x);
     var position_y = toInt(data.position_y);
+
     Board.find(BoardId).success(function(board) {
-      TagIndex.create().success(function(tagIndex) {
-        var tag = Tag.build({ position_x : position_x, position_y : position_y });
-        board.addTag(tag).success(function(createdTag) {
-          createdTag.setTagIndex(tagIndex).success(function(){
+      if (board == null) {
+        socket.emit('error', '存在しないホワイトボードに付箋を貼ろうとしています。BoardId : ' + BoardId);
+        return;
+      }
+      Tag.count({ where : { BoardId : board.id, visible : true }}).success(function(count) {
+        if (count >= config.maxtag) {
+          socket.emit('error', '一枚のホワイトボードに貼れる付箋の上限に達しました。（上限：' + config.maxtag +'）');
+          return;
+        }
+        TagIndex.create().success(function(tagIndex) {
+          var tag = {
+            position_x  : position_x,
+            position_y  : position_y,
+            BoardId     : BoardId,
+            TagIndexId  : TagIndex.id
+          };
+          Tag.create(tag).success(function(createdTag) {
             broadcast(socket, 'createTag', createdTag);
           });
         });
@@ -26,30 +40,28 @@ module.exports = {
       position_y        : toInt(data.position_y),
     };
     Tag.find(updatedata.id).success(function(tag) {
-      if(tag == null || tag.visible == false) {
-        socket.emit('error', '操作できない付箋です。');
-      } else {
-        tag.updateAttributes(updatedata).success(function(updatedTag) {
-          broadcast(socket, 'updateTag', updatedTag);
-        }).error(function(e) {
-          socket.emit('error', e);
-        });
+      if(tag == null) {
+        return;
       }
+      tag.updateAttributes(updatedata).success(function(updatedTag) {
+        broadcast(socket, 'updateTag', updatedTag);
+      }).error(function(e) {
+        socket.emit('error', e);
+      });
     });
   },
   closeTag : function(socket, data) {
     var id = toInt(data);
     Tag.find(id).success(function(tag) {
-      if(tag == null || tag.visible == false) {
-        socket.emit('error', '操作できない付箋です。');
-      } else {
-        tag.visible = false;
-        tag.save().success(function() {
-          broadcast(socket, 'deleteTag', id);
-        }).error(function(e) {
-          socket.emit('error', e);
-        });
+      if(tag == null) {
+        return;
       }
+      tag.visible = false;
+      tag.save().success(function() {
+        broadcast(socket, 'deleteTag', id);
+      }).error(function(e) {
+        socket.emit('error', e);
+      });
     });
   },
   upZIndexTag : function(socket, data) {
