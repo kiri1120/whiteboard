@@ -25,7 +25,9 @@ toText = function(data) {
   return data;
 };
 toInt = function(data) {
-  return sanitize(data).toInt();
+  data = sanitize(data).toInt();
+  if (data < 0) { data = 0; }
+  return data;
 };
 broadcast = function(socket, name, arg) {
   socket.emit(name, arg);
