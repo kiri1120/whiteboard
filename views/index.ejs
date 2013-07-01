@@ -58,6 +58,8 @@
       </div>
     </div>
 
+    <div id='alerts'></div>
+
     <div id='carousel' class='carousel slide' data-interval='0'>
       <ol class='carousel-indicators'></ol>
       <div class='carousel-inner'></div>
@@ -71,7 +73,7 @@
         <i class='icon-arrow-up zindex-up'></i>
         <strong>作成者：<span class='taguser'></span></strong>
         付箋ID：<span class='tagid'></span>
-        <button class='close' data-dismiss='tagreference' aria-hidden='true'><i class='icon-remove'></i></button>
+        <button class='close'><i class='icon-remove'></i></button>
       </div>
 
       <p class='messages'></p>
@@ -91,6 +93,12 @@
       </div>
     </div>
 
+    <!-- alert window reference -->
+    <div id='alertreference' class='alert hide'>
+      <button class="close" data-dismiss="alert"><i class='icon-remove'></i></button>
+      <p class='alert-message'></p>
+    </div>
+
     <!-- error modal window -->
     <div id='error' class='modal hide fade' role='dialog' aria-labelledby='Error' aria-hidden='true'>
       <div class='modal-header'>
@@ -104,5 +112,6 @@
         <button type='button' class='btn btn-primary' data-dismiss='modal'>OK</button>
       </div>
     </div>
+
   </body>
 </html>

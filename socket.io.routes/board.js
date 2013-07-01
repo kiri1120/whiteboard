@@ -26,7 +26,7 @@ module.exports = {
       Board.find(id).success(function(board){
         board.visible = false;
         board.save().success(function() {
-          broadcast(socket, 'deleteBoard', id);
+          broadcast(socket, 'deleteBoard', board);
         });
       });
     });

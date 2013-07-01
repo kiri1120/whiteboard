@@ -30,6 +30,7 @@ module.exports = function(socket) {
           messages.forEach(function(message) {
             socket.emit('showMessage', { user: users[message.UserId], message : message});
           });
+          socket.emit('initEnd');
         });
       });
     });
