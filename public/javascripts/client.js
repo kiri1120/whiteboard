@@ -207,6 +207,10 @@ $(function() {
       socket.emit('upZIndexTag', getTagId(html));
     });
 
+    // ページ切り替えコントローラーを最前面に
+    $('#carousel-control-left').css('z-index', tag.zIndex + 1);
+    $('#carousel-control-right').css('z-index', tag.zIndex + 1);
+
     html.show();
   }
 
@@ -249,6 +253,10 @@ $(function() {
       width : tag.width,
       height : tag.height - messageformHeight,
     });
+
+    // ページ切り替えコントローラーを最前面に
+    $('#carousel-control-left').css('z-index', tag.zIndex + 1);
+    $('#carousel-control-right').css('z-index', tag.zIndex + 1);
   }
 
   // delete tag
