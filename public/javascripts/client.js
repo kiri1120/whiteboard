@@ -284,7 +284,13 @@ $(function() {
   function showMessage(user, message) {
     var taghtml = $('#tag-' + message.TagId);
     var html = $('<div>').addClass('message').append($('<p>').html('<strong>' + user.nickname + '</strong>＞' + message.message));
-    taghtml.find('.messages').append(html);
+    var messages = taghtml.find('.messages');
+    if (messages.scrollTop() == messages.prop('scrollHeight') - messages.height()) {
+      messages.append(html);
+      messages.scrollTop(messages.prop('scrollHeight') - messages.height());
+    } else {
+      messages.append(html);
+    }
   }
 
   // show error message
