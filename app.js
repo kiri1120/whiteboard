@@ -25,9 +25,7 @@ toText = function(data) {
   return data;
 };
 toInt = function(data) {
-  data = sanitize(data).toInt();
-  if (data < 0) { data = 0; }
-  return data;
+  return sanitize(data).toInt();
 };
 broadcast = function(socket, name, arg) {
   socket.emit(name, arg);
@@ -64,10 +62,12 @@ Session = sequelize.import(__dirname + '/models/session');
 // model associations
 Board.hasMany(Tag);
 Tag.hasMany(Message);
+Tag.belongsTo(User);
 Message.belongsTo(User);
 Message.belongsTo(Tag);
 User.hasMany(Message);
 User.hasMany(Session);
+User.hasMany(Tag);
 Session.belongsTo(User);
 
 var app = express();

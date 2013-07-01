@@ -8,7 +8,12 @@ var boardControl    = require('./board'),
 module.exports = function(socket) {
   // initStart
   socket.emit('initStart');
-  User.findAll().success(function(users){
+  User.findAll().success(function(rows) {
+    var users = [];
+    rows.forEach(function(user) {
+      users[user.id] = user;
+    });
+
     Board.findAll({ where: { visible: true }}).success(function(boards) {
       var boardIds = [];
       boards.forEach(function(board) {
@@ -19,15 +24,11 @@ module.exports = function(socket) {
         var tagIds = [];
         tags.forEach(function(tag) {
           tagIds.push(tag.id);
-          socket.emit('createTag', tag);
+          socket.emit('createTag', { tag : tag, user : users[tag.UserId] });
         });
         Message.findAll({ where : { TagId : tagIds }}).success(function(messages) {
           messages.forEach(function(message) {
-            users.forEach(function(user) {
-              if (user.id == message.UserId) {
-                socket.emit('showMessage', { user: user, message : message});
-              }
-            });
+            socket.emit('showMessage', { user: users[message.UserId], message : message});
           });
         });
       });

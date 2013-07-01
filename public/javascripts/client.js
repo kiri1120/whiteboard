@@ -40,7 +40,7 @@ $(function() {
 
   // 付箋貼付
   socket.on('createTag', function(data) {
-    createTag(data);
+    createTag(data.tag, data.user);
   });
 
   // 付箋更新
@@ -143,7 +143,7 @@ $(function() {
   }
 
   // create tag
-  function createTag(tag) {
+  function createTag(tag, user) {
     var html = $('#tagreference').clone(true);
     var css = {
       color           : tag.color,
@@ -159,6 +159,10 @@ $(function() {
     html.attr('id', 'tag-' + tag.id);
     html.css(css);
 
+    // 付箋タイトル部分
+    html.find('.tagid').text(tag.id);
+    html.find('.taguser').text(user.nickname);
+
     html.find('.messages').css({
       width : tag.width,
       height : tag.height - messageformHeight,
@@ -170,7 +174,7 @@ $(function() {
     }});
 
     // 移動
-    html.draggable({ handle : '.move', stop : function() {
+    html.draggable({ handle : '.dragarea', containment: 'parent', stop : function() {
       changeTag(html);
     }});
     html.find('.move').tooltip({ title : '移動'});

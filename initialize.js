@@ -15,8 +15,10 @@ var Board   = sequelize.import(__dirname + '/models/board'),
 // Associations
 Board.hasMany(Tag);
 Tag.hasMany(Message);
+Tag.belongsTo(User);
 Message.belongsTo(User);
 Message.belongsTo(Tag);
+User.hasMany(Tag);
 User.hasMany(Message);
 User.hasMany(Session);
 Session.belongsTo(User);

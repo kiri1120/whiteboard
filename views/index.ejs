@@ -67,9 +67,14 @@
 
     <!-- tag reference -->
     <div id='tagreference' class='tag alert hide'>
-      <button class='close' data-dismiss='tagreference' aria-hidden='true'><i class='icon-remove'></i></button>
-      <i class='icon-move move'></i>
-      <i class='icon-arrow-up zindex-up'></i>
+      <div class='dragarea'>
+        <i class='icon-arrow-up zindex-up'></i>
+        <strong>
+          付箋ID：<span class='tagid'></span>
+          作成者：<span class='taguser'></span>
+        </strong>
+        <button class='close' data-dismiss='tagreference' aria-hidden='true'><i class='icon-remove'></i></button>
+      </div>
 
       <p class='messages'></p>
       <div class='tagforms'>

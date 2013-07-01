@@ -5,29 +5,31 @@ module.exports = {
     var top = toInt(data.top);
     var left = toInt(data.left);
 
-    Board.find(BoardId).success(function(board) {
-      if (board == null) {
-        socket.emit('error', '存在しないホワイトボードに付箋を貼ろうとしています。BoardId : ' + BoardId);
-        return;
-      }
-      Tag.count({ where : { BoardId : board.id, visible : true }}).success(function(count) {
-        if (count >= config.maxtag) {
-          socket.emit('error', '一枚のホワイトボードに貼れる付箋の上限に達しました。（上限：' + config.maxtag +'）');
+    socket.get('user', function(err, user) {
+      Board.find(BoardId).success(function(board) {
+        if (board == null) {
+          socket.emit('error', '存在しないホワイトボードに付箋を貼ろうとしています。BoardId : ' + BoardId);
           return;
         }
-        Tag.max('zIndex').success(function(zIndexMax) {
-          var tag = {
-            top     : top,
-            left    : left,
-            BoardId : BoardId,
-          };
-          if (isNaN(zIndexMax)) {
-            tag.zIndex = 1;
-          } else {
-            tag.zIndex = zIndexMax + 1;
+        Tag.count({ where : { BoardId : board.id, visible : true }}).success(function(count) {
+          if (count >= config.maxtag) {
+            socket.emit('error', '一枚のホワイトボードに貼れる付箋の上限に達しました。（上限：' + config.maxtag +'）');
+            return;
           }
-          Tag.create(tag).success(function(createdTag) {
-            broadcast(socket, 'createTag', createdTag);
+          Tag.max('zIndex').success(function(zIndexMax) {
+            if (isNaN(zIndexMax)) {
+              zIndexMax = 0;
+            }
+            var tag = {
+              top     : top,
+              left    : left,
+              zIndex  : zIndexMax + 1,
+              BoardId : BoardId,
+              UserId  : user.id,
+            };
+            Tag.create(tag).success(function(createdTag) {
+              broadcast(socket, 'createTag', { tag : createdTag, user : user });
+            });
           });
         });
       });
@@ -48,7 +50,7 @@ module.exports = {
       tag.save().success(function(updatedTag) {
         broadcast(socket, 'updateTag', updatedTag);
       }).error(function(e) {
-        socket.emit('error', e);
+        socket.emit('error', toString(e));
       });
     });
   },
