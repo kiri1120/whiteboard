@@ -103,7 +103,7 @@ $(function() {
       }
       socket.emit('createTag', data);
     });
-    var caption = $('<div>').addClass('carousel-caption pull-top').append($('<h4>').text(board.name));
+    var caption = $('<div>').addClass('carousel-caption pull-top').append($('<h4>').html(board.name));
     var indicator = $('<li>').attr('data-target', '#carousel').attr('data-slide-to', boardsCount);
 
     if (boardsCount == 0) {
@@ -123,7 +123,7 @@ $(function() {
       var alerthtml = $('#alertreference').clone(true);
       alerthtml.removeAttr('id');
       alerthtml.addClass('alert-info');
-      alerthtml.find('.alert-message').text('ボード（' + board.name + '）が新規作成されました。');
+      alerthtml.find('.alert-message').html('ボード（' + board.name + '）が新規作成されました。');
       $('#alerts').append(alerthtml);
       alerthtml.show();
     }
@@ -150,14 +150,14 @@ $(function() {
     var alerthtml = $('#alertreference').clone(true);
     alerthtml.removeAttr('id');
     alerthtml.addClass('alert-error');
-    alerthtml.find('.alert-message').text('ボード（' + board.name + '）が削除されました。');
+    alerthtml.find('.alert-message').html('ボード（' + board.name + '）が削除されました。');
     $('#alerts').append(alerthtml);
     alerthtml.show();
   }
 
   // rename board
   function renameBoard(board) {
-    $('#board-' + board.id + ' h4').text(board.name);
+    $('#board-' + board.id + ' h4').html(board.name);
   }
 
   function getActiveBoardId() {
@@ -182,8 +182,8 @@ $(function() {
     html.css(css);
 
     // 付箋タイトル部分
-    html.find('.tagid').text(tag.id);
-    html.find('.taguser').text(user.nickname);
+    html.find('.tagid').html(tag.id);
+    html.find('.taguser').html(user.nickname);
 
     html.find('.messages').css({
       width : tag.width,
@@ -316,7 +316,7 @@ $(function() {
 
   // show error message
   function errorShow(error) {
-    $('#error-body').text(error);
+    $('#error-body').html(error);
     $('#error').modal('show');
   }
 
