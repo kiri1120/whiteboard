@@ -235,8 +235,7 @@ $(function() {
     // ページ切り替えコントローラーを最前面に
     $('#carousel-control-left').css('z-index', tag.zIndex + 1);
     $('#carousel-control-right').css('z-index', tag.zIndex + 1);
-    $('.carousel-caption h4').css('z-index', tag.zIndex + 1);
-    $('.carousel-indicators').css('z-index', tag.zIndex + 2);
+    $('.carousel-indicators').css('z-index', tag.zIndex + 1);
 
     html.show();
   }
@@ -284,8 +283,7 @@ $(function() {
     // ページ切り替えコントローラーを最前面に
     $('#carousel-control-left').css('z-index', tag.zIndex + 1);
     $('#carousel-control-right').css('z-index', tag.zIndex + 1);
-    $('.carousel-caption h4').css('z-index', tag.zIndex + 1);
-    $('.carousel-indicators').css('z-index', tag.zIndex + 2);
+    $('.carousel-indicators').css('z-index', tag.zIndex + 1);
   }
 
   // delete tag
