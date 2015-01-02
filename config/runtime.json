@@ -1,12 +1,13 @@
 {
-  "title"     : "Web WhiteBoard",
-  "port"      : 3000,
-  "mysql"     : "mysql://kiri1120:kiri1120@localhost/nodejs",
-  "session"   : {
-    "expire" : 3600000 // = 60 * 60 * 1000（単位：ミリ秒）
-  },
-  "maxboard"  : 20,
-  "maxtag"    : 20,
-  "navbarHeight" : 60,
-  "messageformHeight" : 100
+    "title" : "Web WhiteBoard",
+    "port" : 3000,
+    "mysql" : "mysql://kiri1120@localhost/whiteboard",
+    "session" : {
+        "expire" : 3600000
+    },
+    "maxboard" : 20,
+    "maxtag" : 20,
+    "navbarHeight" : 60,
+    "messageformHeight" : 100
 }
+
